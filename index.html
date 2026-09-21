@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti 🌻</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: #02050b;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+/* =========================
+   FONDO
+========================= */
+
+#particles {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #ffe889;
+    border-radius: 50%;
+    box-shadow:
+        0 0 5px #ffe889,
+        0 0 15px #ffe889,
+        0 0 25px #ffcc33;
+
+    animation:
+        floatParticle linear infinite,
+        glowParticle ease-in-out infinite;
+}
+
+@keyframes floatParticle {
+    from {
+        transform: translateY(110vh);
+    }
+
+    to {
+        transform: translateY(-20vh);
+    }
+}
+
+@keyframes glowParticle {
+    0%, 100% {
+        opacity: .1;
+        transform: scale(.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.7);
+    }
+}
+
+/* =========================
+   ESCENAS
+========================= */
+
+.scene {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 25px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: scale(.96);
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease,
+        visibility 1s;
+}
+
+.scene.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.small-text {
+    color: #bdbdbd;
+    font-size: clamp(15px, 4vw, 21px);
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+.title {
+    font-size: clamp(38px, 11vw, 75px);
+    font-weight: normal;
+    line-height: 1.05;
+    text-shadow:
+        0 0 10px rgba(255,255,255,.2),
+        0 0 30px rgba(255,213,77,.15);
+
+    animation: titleAppear 1.5s ease;
+}
+
+@keyframes titleAppear {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.description {
+    max-width: 650px;
+    margin-top: 25px;
+
+    color: #d7d7d7;
+
+    font-size: clamp(17px, 4.5vw, 24px);
+    line-height: 1.6;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+button {
+    margin-top: 35px;
+
+    padding: 15px 28px;
+
+    background: rgba(255, 220, 90, .04);
+
+    border: 1px solid #f2cf55;
+
+    border-radius: 50px;
+
+    color: #ffe994;
+
+    font-size: 13px;
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: .4s;
+
+    box-shadow:
+        0 0 15px rgba(255, 211, 66, .15);
+}
+
+button:hover {
+    background: #f2cf55;
+    color: #191200;
+
+    box-shadow:
+        0 0 20px #f2cf55,
+        0 0 50px rgba(242,207,85,.5);
+
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(.95);
+}
+
+/* =========================
+   CONTADOR
+========================= */
+
+.counter {
+    display: flex;
+    gap: clamp(10px, 4vw, 30px);
+
+    margin-top: 30px;
+}
+
+.counter-item {
+    min-width: 55px;
+}
+
+.number {
+    font-size: clamp(30px, 8vw, 55px);
+
+    color: #ffe47a;
+
+    text-shadow:
+        0 0 15px rgba(255,213,68,.6);
+}
+
+.label {
+    margin-top: 5px;
+
+    color: #777;
+
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+/* =========================
+   FLOR
+========================= */
+
+.flower {
+    position: relative;
+
+    width: 250px;
+    height: 310px;
+
+    cursor: pointer;
+
+    transition: transform .5s;
+
+    animation: flowerSway 4s ease-in-out infinite;
+}
+
+.flower:hover {
+    transform: scale(1.08);
+}
+
+@keyframes flowerSway {
+    0%,100% {
+        rotate: -2deg;
+    }
+
+    50% {
+        rotate: 2deg;
+    }
+}
+
+/* TALLO */
+
+.stem {
+    position: absolute;
+
+    width: 8px;
+    height: 190px;
+
+    left: 50%;
+    bottom: 0;
+
+    transform: translateX(-50%);
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            to right,
+            #21451d,
+            #55943d,
+            #1c421b
+        );
+}
+
+/* HOJAS */
+
+.leaf {
+    position: absolute;
+
+    width: 90px;
+    height: 38px;
+
+    background: linear-gradient(
+        135deg,
+        #67a94d,
+        #255525
+    );
+
+    border-radius: 100% 0 100% 0;
+}
+
+.leaf-left {
+    left: 28px;
+    bottom: 85px;
+    rotate: 25deg;
+}
+
+.leaf-right {
+    right: 25px;
+    bottom: 120px;
+    rotate: 155deg;
+}
+
+/* CABEZA */
+
+.flower-head {
+    position: absolute;
+
+    width: 145px;
+    height: 145px;
+
+    left: 50%;
+    top: 5px;
+
+    transform: translateX(-50%);
+}
+
+/* PÉTALOS */
+
+.petal {
+    position: absolute;
+
+    width: 55px;
+    height: 85px;
+
+    left: 50%;
+    top: 50%;
+
+    transform-origin: 50% 100%;
+
+    border-radius:
+        50% 50%
+        45% 45%;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 20%,
+            #fff48a,
+            #ffd21e 55%,
+            #efa900
+        );
+
+    box-shadow:
+        0 0 12px rgba(255,209,38,.25);
+}
+
+.petal:nth-child(1) {
+    transform: translate(-50%,-100%) rotate(0deg);
+}
+
+.petal:nth-child(2) {
+    transform: translate(-50%,-100%) rotate(45deg);
+}
+
+.petal:nth-child(3) {
+    transform: translate(-50%,-100%) rotate(90deg);
+}
+
+.petal:nth-child(4) {
+    transform: translate(-50%,-100%) rotate(135deg);
+}
+
+.petal:nth-child(5) {
+    transform: translate(-50%,-100%) rotate(180deg);
+}
+
+.petal:nth-child(6) {
+    transform: translate(-50%,-100%) rotate(225deg);
+}
+
+.petal:nth-child(7) {
+    transform: translate(-50%,-100%) rotate(270deg);
+}
+
+.petal:nth-child(8) {
+    transform: translate(-50%,-100%) rotate(315deg);
+}
+
+/* CENTRO */
+
+.flower-center {
+    position: absolute;
+
+    width: 65px;
+    height: 65px;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%,-50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #8b5b1b 0%,
+            #4a2d0c 45%,
+            #211303 100%
+        );
+
+    box-shadow:
+        0 0 20px rgba(255,196,40,.4);
+}
+
+/* =========================
+   MENSAJE FINAL
+========================= */
+
+.final-flower {
+    transform: scale(.75);
+    margin-bottom: -20px;
+}
+
+.final-title {
+    font-size: clamp(38px, 11vw, 76px);
+
+    color: #ffe77c;
+
+    line-height: 1.05;
+
+    text-shadow:
+        0 0 15px #f5c936,
+        0 0 40px rgba(255,200,30,.35);
+
+    animation: finalAppear 2s ease;
+}
+
+.final-text {
+    max-width: 700px;
+
+    margin-top: 20px;
+
+    color: #eeeeee;
+
+    font-size: clamp(17px, 4.5vw, 25px);
+
+    line-height: 1.7;
+
+    animation: finalAppear 2.5s ease;
+}
+
+@keyframes finalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   INDICADOR
+========================= */
+
+.tap {
+    margin-top: 20px;
+
+    color: #777;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+    animation: tapBlink 1.5s infinite;
+}
+
+@keyframes tapBlink {
+    0%,100% {
+        opacity: .3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:500px) {
+
+    .counter {
+        gap: 9px;
+    }
+
+    .counter-item {
+        min-width: 48px;
+    }
+
+    .flower {
+        transform: scale(.82);
+    }
+
+    .flower:hover {
+        transform: scale(.88);
+    }
+
+    .final-flower {
+        transform: scale(.65);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PARTÍCULAS -->
+<div id="particles"></div>
+
+
+<!-- =========================
+     ESCENA 1
+========================= -->
+
+<section class="scene active" id="scene1">
+
+    <div class="small-text">
+        mira las luciérnagas...
+    </div>
+
+    <h1 class="title">
+        Tengo algo<br>
+        para ti
+    </h1>
+
+    <p class="description">
+        Quédate un momento.<br>
+        Hay una pequeña sorpresa esperándote ✨
+    </p>
+
+    <button onclick="showScene(2)">
+        TOCA PARA CONTINUAR
+    </button>
+
+</section>
+
+
+<!-- =========================
+     ESCENA 2
+========================= -->
+
+<section class="scene" id="scene2">
+
+    <div class="small-text">
+        antes de continuar...
+    </div>
+
+    <h1 class="title">
+        El tiempo pasa
+    </h1>
+
+    <p class="description">
+        pero algunos momentos<br>
+        quisiera que duraran para siempre.
+    </p>
+
+    <div class="counter">
+
+        <div class="counter-item">
+            <div class="number" id="days">00</div>
+            <div class="label">DÍAS</div>
+        </div>
+
+        <div class="counter-item">
+            <div class="number" id="hours">00</div>
+            <div class="label">HORAS</div>
+        </div>
+
+        <div class="counter-item">
+            <div class="number" id="minutes">00</div>
+            <div class="label">MINUTOS</div>
+        </div>
+
+        <div class="counter-item">
+            <div class="number" id="seconds">00</div>
+            <div class="label">SEGUNDOS</div>
+        </div>
+
+    </div>
+
+    <button onclick="showScene(3)">
+        TOCA PARA CONTINUAR
+    </button>
+
+</section>
+
+
+<!-- =========================
+     ESCENA 3
+========================= -->
+
+<section class="scene" id="scene3">
+
+    <div class="small-text">
+        espera...
+    </div>
+
+    <h1 class="title">
+        Hay una sorpresa 🌻
+    </h1>
+
+    <p class="description">
+        Pero tendrás que tocar la flor<br>
+        para descubrirla.
+    </p>
+
+    <button onclick="showScene(4)">
+        🌻 TOCAR LA FLOR 🌻
+    </button>
+
+</section>
+
+
+<!-- =========================
+     ESCENA 4
+========================= -->
+
+<section class="scene" id="scene4">
+
+    <div class="small-text">
+        una flor para ti
+    </div>
+
+    <div
+        class="flower"
+        onclick="showScene(5)"
+    >
+
+        <div class="flower-head">
+
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+
+            <div class="flower-center"></div>
+
+        </div>
+
+        <div class="stem"></div>
+
+        <div class="leaf leaf-left"></div>
+        <div class="leaf leaf-right"></div>
+
+    </div>
+
+    <div class="tap">
+        TOCA LA FLOR
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ESCENA 5
+========================= -->
+
+<section class="scene" id="scene5">
+
+    <div class="flower final-flower">
+
+        <div class="flower-head">
+
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+
+            <div class="flower-center"></div>
+
+        </div>
+
+        <div class="stem"></div>
+
+        <div class="leaf leaf-left"></div>
+        <div class="leaf leaf-right"></div>
+
+    </div>
+
+
+    <h1 class="final-title">
+        Feliz Día<br>
+        de las Flores Amarillas 🌻
+    </h1>
+
+    <p class="final-text">
+        Cada flor que ves aquí lleva<br>
+        un pedacito de mi corazón.<br><br>
+
+        Así como el sol ilumina los campos,<br>
+        tú iluminas mi vida.
+    </p>
+
+</section>
+
+
+<script>
+
+/* =====================================================
+   CREAR LUCIÉRNAGAS / PARTÍCULAS
+===================================================== */
+
+const particleContainer =
+    document.getElementById("particles");
+
+for(let i = 0; i < 70; i++){
+
+    const particle =
+        document.createElement("div");
+
+    particle.className = "particle";
+
+    particle.style.left =
+        Math.random() * 100 + "%";
+
+    particle.style.top =
+        Math.random() * 100 + "%";
+
+    particle.style.animationDuration =
+        (4 + Math.random() * 8) + "s, " +
+        (1.5 + Math.random() * 3) + "s";
+
+    particle.style.animationDelay =
+        (-Math.random() * 10) + "s, " +
+        (-Math.random() * 3) + "s";
+
+    const size =
+        1 + Math.random() * 3;
+
+    particle.style.width = size + "px";
+    particle.style.height = size + "px";
+
+    particleContainer.appendChild(particle);
+}
+
+
+/* =====================================================
+   CAMBIAR ESCENAS
+===================================================== */
+
+function showScene(number){
+
+    document
+        .querySelectorAll(".scene")
+        .forEach(scene => {
+
+            scene.classList.remove("active");
+
+        });
+
+    const nextScene =
+        document.getElementById("scene" + number);
+
+    nextScene.classList.add("active");
+
+}
+
+
+/* =====================================================
+   CONTADOR
+===================================================== */
+
+/*
+   Puedes cambiar esta fecha por la que quieras.
+
+   Ejemplo:
+   new Date("2026-09-21T00:00:00")
+*/
+
+const startDate =
+    new Date("2026-09-21T00:00:00");
+
+
+function updateCounter(){
+
+    const now =
+        new Date();
+
+    let difference =
+        now - startDate;
+
+    if(difference < 0){
+
+        difference = 0;
+
+    }
+
+
+    const totalSeconds =
+        Math.floor(difference / 1000);
+
+
+    const days =
+        Math.floor(
+            totalSeconds / 86400
+        );
+
+
+    const hours =
+        Math.floor(
+            (totalSeconds % 86400) / 3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+
+    const seconds =
+        totalSeconds % 60;
+
+
+    document.getElementById("days")
+        .textContent =
+        String(days).padStart(2,"0");
+
+
+    document.getElementById("hours")
+        .textContent =
+        String(hours).padStart(2,"0");
+
+
+    document.getElementById("minutes")
+        .textContent =
+        String(minutes).padStart(2,"0");
+
+
+    document.getElementById("seconds")
+        .textContent =
+        String(seconds).padStart(2,"0");
+
+}
+
+
+setInterval(
+    updateCounter,
+    1000
+);
+
+updateCounter();
+
+
+/* =====================================================
+   CLICK EXTRA EN FLORES
+===================================================== */
+
+document
+    .querySelectorAll(".flower")
+    .forEach(flower => {
+
+        flower.addEventListener(
+            "click",
+            function(){
+
+                for(let i = 0; i < 10; i++){
+
+                    createSpark(
+                        flower
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+
+function createSpark(element){
+
+    const spark =
+        document.createElement("div");
+
+    spark.style.position =
+        "fixed";
+
+    spark.style.width =
+        "5px";
+
+    spark.style.height =
+        "5px";
+
+    spark.style.borderRadius =
+        "50%";
+
+    spark.style.background =
+        "#ffe45c";
+
+    spark.style.boxShadow =
+        "0 0 15px #ffe45c";
+
+    spark.style.pointerEvents =
+        "none";
+
+    const rect =
+        element.getBoundingClientRect();
+
+    spark.style.left =
+        rect.left +
+        rect.width / 2 +
+        "px";
+
+    spark.style.top =
+        rect.top +
+        rect.height / 3 +
+        "px";
+
+    document.body.appendChild(spark);
+
+
+    const x =
+        (Math.random() - .5) * 250;
+
+    const y =
+        (Math.random() - .5) * 250;
+
+
+    spark.animate(
+        [
+            {
+                transform:
+                    "translate(0,0)",
+                opacity: 1
+            },
+
+            {
+                transform:
+                    `translate(${x}px,${y}px)`,
+                opacity: 0
+            }
+        ],
+        {
+            duration: 1000,
+            easing: "ease-out"
+        }
+    ).onfinish =
+        () => spark.remove();
+
+}
+
+</script>
+
+</body>
+</html>
